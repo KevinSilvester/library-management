@@ -1,3 +1,5 @@
+using DotNetEnv;
+using library_management.Data;
 
 namespace library_management
 {
@@ -7,9 +9,14 @@ namespace library_management
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            Env.Load();
+
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            builder.Services.AddSingleton<MongoDbContext>();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
