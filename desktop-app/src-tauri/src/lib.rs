@@ -16,7 +16,7 @@ enum AccessLevel {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct UserData {
-    id: u32,
+    id: usize,
     name: String,
     email: String,
     api_key: String,
@@ -47,11 +47,11 @@ fn stub_user_data() -> UserDataList {
 }
 /// ---
 
-/// --- Tauri Command that will be compiled to WASM and will be invokable in the frontend
+/// --- Tauri Commands that will be compiled to WASM and will be invokable in the frontend
 ///     typescript code
 #[tauri::command]
-fn list_users(state: State<'_, UserDataList>) -> Result<Vec<(u32, String)>, String> {
-    let users: Vec<(u32, String)> = state
+fn list_users(user_data_list: State<'_, UserDataList>) -> Result<Vec<(usize, String)>, String> {
+    let users = user_data_list
         .inner()
         .iter()
         .map(|u| (u.id, u.name.clone()))
@@ -60,8 +60,11 @@ fn list_users(state: State<'_, UserDataList>) -> Result<Vec<(u32, String)>, Stri
 }
 
 #[tauri::command]
-fn load_user_data(state: State<'_, UserDataList>) -> Result<UserDataList, String> {
-    Ok(state.inner().clone())
+fn load_user_data(user_data_list: State<'_, UserDataList>, id: usize) -> Result<UserData, String> {
+    match user_data_list.inner().iter().find(|u| u.id == id).cloned() {
+        Some(user) => Ok(user),
+        None => Err(format!("User with id '{id}' not found")),
+    }
 }
 /// ---
 
