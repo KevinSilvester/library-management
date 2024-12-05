@@ -1,17 +1,13 @@
-import path from 'node:path';
-import { defineConfig } from 'vite';
-import { sveltekit } from '@sveltejs/kit/vite';
+import react from '@vitejs/plugin-react-swc'
+import path from 'node:path'
+import { defineConfig } from 'vite'
 
-const host = process.env.TAURI_DEV_HOST;
+const host = process.env.TAURI_DEV_HOST
 
-export default defineConfig(async () => ({
-   plugins: [sveltekit()],
-   resolve: {
-      alias: {
-         $lib: path.resolve('./src/lib')
-      }
-   },
+export default defineConfig({
+   plugins: [react()],
    clearScreen: false,
+   // 2. tauri expects a fixed port, fail if that port is not available
    server: {
       port: 1420,
       strictPort: true,
@@ -26,5 +22,10 @@ export default defineConfig(async () => ({
       watch: {
          ignored: ['**/src-tauri/**']
       }
+   },
+   resolve: {
+      alias: {
+         '@': path.resolve(__dirname, './src')
+      }
    }
-}));
+})
