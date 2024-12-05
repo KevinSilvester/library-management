@@ -1,0 +1,70 @@
+import type { Config } from "tailwindcss";
+// import type { PluginUtils } from "tailwindcss/types/config";
+import containerQueries from "@tailwindcss/container-queries";
+import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+
+// const hsl: PluginUtils["hsl"] = (variable) => (args) => {
+//    if (!args.opacityValue) return `hsl(var(${variable}))`;
+//    return `hsl(var(${variable}) / ${args.opacityValue})`;
+// };
+
+export default {
+   content: ["./src/**/*.{html,js,svelte,ts}"],
+   darkMode: 'class',
+   theme: {
+      extend: {
+         colors: {
+            custom: {
+               slate: {
+                  50: 'hsl(var(--slate-50))',
+                  100: 'hsl(var(--slate-100))',
+                  200: 'hsl(var(--slate-200))',
+                  300: 'hsl(var(--slate-300))',
+                  400: 'hsl(var(--slate-400))',
+               },
+               blue: {
+                  100: 'hsl(var(--blue-100))',
+                  200: 'hsl(var(--blue-200))',
+               },
+               navy: {
+                  100: 'hsl(var(--navy-100))',
+                  200: 'hsl(var(--navy-200))',
+                  300: 'hsl(var(--navy-300))',
+                  400: 'hsl(var(--navy-400))',
+                  500: 'hsl(var(--navy-500))',
+                  600: 'hsl(var(--navy-600))',
+                  700: 'hsl(var(--navy-700))',
+               },
+               white: {
+                  100: 'hsl(var(--white-100))',
+                  200: 'hsl(var(--white-200))',
+               },
+               grey: {
+                  100: 'hsl(var(--grey-100))',
+                  200: 'hsl(var(--grey-200))',
+               },
+            },
+         },
+         fontFamily: {
+            body: ["Nunito", "sans-serif"],
+         },
+         gridTemplateColumns: {
+            "auto-1": "var(--grid-auto-1)",
+            "auto-2": "var(--grid-auto-2)",
+         },
+         boxShadow: {
+            "sm-blue": "0px 1px 2px 1px hsl(var(--navy-600) / 0.05)",
+            "md-img":
+               "0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color), 0 -1px 11px -3px var(--tw-shadow-color)",
+            button: "0 0 6px 2px var(--tw-shadow-color)",
+            error: `0 0 2px 1px rgb(239 68 68)`,
+         },
+         backgroundImage: {
+            "blue-navy":
+               "linear-gradient(180deg, hsl(var(--navy-500) / 0.5) 0%, hsl(var(--navy-500) / 0.85) 73%)",
+         },
+      },
+   },
+   plugins: [typography, forms, containerQueries],
+} satisfies Config;
