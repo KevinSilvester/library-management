@@ -1,27 +1,23 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace library_management.Models
+namespace library_management.Models;
+
+public class Book
 {
-    public class Book
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)] // Maps ObjectId to a string
-        public string Id { get; set; }
+    [Key]
+    public int Id { get; set; }
 
-        [BsonElement("title")]
-        public string Title { get; set; }
+    [Required]
+    [MaxLength(100)]
+    public string Title { get; set; }
 
-        [BsonElement("author")]
-        public string Author { get; set; }
+    [Required]
+    [MaxLength(50)]
+    public string Author { get; set; }
 
-        [BsonElement("isbn")]
-        public string ISBN { get; set; }
+    [Required]
+    [MaxLength(13)]
+    public string ISBN { get; set; }
 
-        [BsonElement("genre")]
-        public string Genre { get; set; }
-
-        [BsonElement("copiesAvailable")]
-        public int CopiesAvailable { get; set; }
-    }
+    public int CopiesAvailable { get; set; }
 }

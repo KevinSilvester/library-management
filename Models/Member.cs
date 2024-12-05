@@ -1,24 +1,22 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace library_management.Models
+namespace library_management.Models;
+
+public class Member
 {
-    public class Member
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)] // Map ObjectId to string
-        public string Id { get; set; }
+    [Key]
+    public int Id { get; set; }
 
-        [BsonElement("name")]
-        public string Name { get; set; }
+    [Required]
+    [MaxLength(50)]
+    public string Name { get; set; }
 
-        [BsonElement("email")]
-        public string Email { get; set; }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
 
-        [BsonElement("phone")]
-        public string Phone { get; set; }
+    [Required]
+    public DateTime MembershipDate { get; set; }
 
-        [BsonElement("membershipDate")]
-        public DateTime MembershipDate { get; set; }
-    }
+    public ICollection<Borrowing> Borrowings { get; set; }
 }
