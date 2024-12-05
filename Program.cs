@@ -12,10 +12,10 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         Env.Load();
+        var connectionString = Environment.GetEnvironmentVariable("AZURE_CONNECTION_STRING");
 
         builder.Services.AddDbContext<LibraryDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+        options.UseSqlServer(connectionString));
         // Add Repositories and Services
         builder.Services.AddScoped<IBookRepository, BookRepository>();
         builder.Services.AddScoped<IMemberRepository, MemberRepository>();
