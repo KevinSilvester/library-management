@@ -1,14 +1,15 @@
 /** @type {import("prettier").Config} */
 export default {
-   arrowParens: "always",
+   arrowParens: 'always',
    jsxSingleQuote: true,
-   quoteProps: "as-needed",
+   quoteProps: 'as-needed',
    tabWidth: 3,
    useTabs: false,
    singleQuote: true,
-   trailingComma: "none",
+   trailingComma: 'none',
    printWidth: 120,
    semi: false,
    importOrderSeparation: true,
-   plugins: ["@trivago/prettier-plugin-sort-imports"],
-};
+   importOrder: ['^[./]'],
+   plugins: ['@trivago/prettier-plugin-sort-imports']
+}

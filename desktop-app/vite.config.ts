@@ -1,3 +1,4 @@
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'node:path'
 import { defineConfig } from 'vite'
@@ -7,7 +8,6 @@ const host = process.env.TAURI_DEV_HOST
 export default defineConfig({
    plugins: [react()],
    clearScreen: false,
-   // 2. tauri expects a fixed port, fail if that port is not available
    server: {
       port: 1420,
       strictPort: true,
