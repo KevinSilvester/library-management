@@ -23,16 +23,52 @@ namespace library_management.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetBorrowings()
+        public async Task<IActionResult> GetBorrowings([FromQuery] string? query,
+    [FromQuery] DateTime? startDate,
+    [FromQuery] DateTime? endDate,
+    [FromQuery] int? pageNumber = 1,
+    [FromQuery] int? pageSize = 10)
         {
-            var borrowings = await _dbContext.Borrowings
-                .Include(b => b.Book)
-                .Include(b => b.Member)
+            var borrowingsQuery = _dbContext.Borrowings
+       .Include(b => b.Book)
+       .Include(b => b.Member)
+       .AsQueryable();
+
+            // Search by query across related entities
+            if (!string.IsNullOrEmpty(query))
+            {
+                borrowingsQuery = borrowingsQuery.Where(b =>
+                    b.Book.Title.Contains(query) ||
+                    b.Book.Author.Contains(query) ||
+                    b.Member.Name.Contains(query) ||
+                    b.Member.Email.Contains(query));
+            }
+
+            // Filter by date range
+            if (startDate.HasValue)
+                borrowingsQuery = borrowingsQuery.Where(b => b.BorrowedDate >= startDate.Value);
+            if (endDate.HasValue)
+                borrowingsQuery = borrowingsQuery.Where(b => b.BorrowedDate <= endDate.Value);
+
+            var totalRecords = await borrowingsQuery.CountAsync();
+
+            var borrowings = await borrowingsQuery
+                .Skip((pageNumber.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value)
                 .ToListAsync();
+
             var borrowingDtos = _mapper.Map<List<BorrowingDto>>(borrowings);
-            return Ok(borrowingDtos);
+
+            return Ok(new
+            {
+                Data = borrowingDtos,
+                Pagination = new
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalRecords = totalRecords
+                }
+            });
         }
 
 

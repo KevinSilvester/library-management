@@ -23,12 +23,39 @@ namespace library_management.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBooks()
+        public async Task<IActionResult> GetBooks([FromQuery] string? search, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var books = await _dbContext.Books.ToListAsync();
+            // Start with all books
+            var booksQuery = _dbContext.Books.AsQueryable();
+
+            // Perform search against all relevant columns
+            if (!string.IsNullOrEmpty(search))
+            {
+                booksQuery = booksQuery.Where(b =>
+    b.Title.ToLower().Contains(search.ToLower()) ||
+    b.Author.ToLower().Contains(search.ToLower()) ||
+    b.ISBN.ToLower().Contains(search.ToLower()) ||
+    b.CopiesAvailable.ToString().ToLower().Contains(search.ToLower()));
+
+            }
+
+            // Pagination
+            var totalBooks = await booksQuery.CountAsync();
+            var books = await booksQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Map to DTO
             var bookDtos = _mapper.Map<List<BookDto>>(books);
 
-            return Ok(bookDtos);
+            return Ok(new
+            {
+                TotalBooks = totalBooks,
+                Page = page,
+                PageSize = pageSize,
+                Books = bookDtos
+            });
         }
 
 

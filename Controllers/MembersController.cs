@@ -23,11 +23,34 @@ namespace library_management.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetMembers()
+        public async Task<IActionResult> GetMembers([FromQuery] string? query, [FromQuery] int? pageNumber = 1, [FromQuery] int? pageSize = 10)
         {
-            var members = await _dbContext.Members.Include(m => m.Borrowings).ToListAsync();
+            var membersQuery = _dbContext.Members.Include(m => m.Borrowings).AsQueryable();
+            if (!string.IsNullOrEmpty(query))
+            {
+                membersQuery = membersQuery.Where(m =>
+                    m.Name.Contains(query) ||
+                    m.Email.Contains(query) ||
+                    m.PhoneNumber.Contains(query));
+            }
+
+            var totalRecords = await membersQuery.CountAsync();
+
+            var members = await membersQuery
+                .Skip((pageNumber.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value)
+                .ToListAsync();
             var memberDtos = _mapper.Map<List<MemberDto>>(members);
-            return Ok(memberDtos);
+            return Ok(new
+            {
+                Data = memberDtos,
+                Pagination = new
+                {
+                    PageNumber = pageNumber,
+                    PageSize = pageSize,
+                    TotalRecords = totalRecords
+                }
+            });
         }
 
 
