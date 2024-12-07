@@ -1,4 +1,6 @@
-﻿using library_management.Models;
+﻿using library_management.Data;
+
+using library_management.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace library_management.Repositories
@@ -17,9 +19,9 @@ namespace library_management.Repositories
             return await _dbContext.Books.ToListAsync();
         }
 
-        public async Task<Book> GetBookByIdAsync(int id)
+        public async Task<Book> GetBookByIdAsync(string isbn)
         {
-            return await _dbContext.Books.FindAsync(id);
+            return await _dbContext.Books.FindAsync(isbn);
         }
 
         public async Task AddBookAsync(Book book)
@@ -34,9 +36,9 @@ namespace library_management.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteBookAsync(int id)
+        public async Task DeleteBookAsync(string isbn)
         {
-            var book = await GetBookByIdAsync(id);
+            var book = await GetBookByIdAsync(isbn);
             if (book != null)
             {
                 _dbContext.Books.Remove(book);

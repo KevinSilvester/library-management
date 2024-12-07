@@ -1,22 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace library_management.Models;
-
-public class Member
+namespace library_management.Models
 {
-    [Key]
-    public int Id { get; set; }
+    public class Member
+    {
+        [Key]
+        public int Id { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public string Name { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; }
 
-    [Required]
-    [EmailAddress]
-    public string Email { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string Email { get; set; }
 
-    [Required]
-    public DateTime MembershipDate { get; set; }
+        [MaxLength(15)]
+        public string PhoneNumber { get; set; }
 
-    public ICollection<Borrowing> Borrowings { get; set; }
+        // Navigation Property
+        public ICollection<Borrowing> Borrowings { get; set; }
+    }
 }

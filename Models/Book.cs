@@ -1,23 +1,21 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace library_management.Models;
-
-public class Book
+namespace library_management.Models
 {
-    [Key]
-    public int Id { get; set; }
+    public class Book
+    {
+        [Key]
+        [MaxLength(13)] // ISBN-13 standard
+        public string ISBN { get; set; }
 
-    [Required]
-    [MaxLength(100)]
-    public string Title { get; set; }
+        [Required]
+        [MaxLength(255)]
+        public string Title { get; set; }
 
-    [Required]
-    [MaxLength(50)]
-    public string Author { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string Author { get; set; }
 
-    [Required]
-    [MaxLength(13)]
-    public string ISBN { get; set; }
-
-    public int CopiesAvailable { get; set; }
+        public int CopiesAvailable { get; set; }
+    }
 }

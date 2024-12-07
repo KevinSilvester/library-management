@@ -1,6 +1,7 @@
-﻿using library_management.Models;
-using library_management.Repositories;
+﻿using library_management.Data;
+using library_management.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace library_management.Controllers
 {
@@ -8,72 +9,63 @@ namespace library_management.Controllers
     [ApiController]
     public class BorrowingsController : ControllerBase
     {
-        private readonly IBorrowingRepository _repository;
+        private readonly LibraryDbContext _dbContext;
 
-        public BorrowingsController(IBorrowingRepository repository)
+        public BorrowingsController(LibraryDbContext dbContext)
         {
-            _repository = repository;
+            _dbContext = dbContext;
         }
 
-        // GET: api/Borrowings
         [HttpGet]
         public async Task<IActionResult> GetBorrowings()
         {
-            var borrowings = await _repository.GetAllBorrowingsAsync();
+            var borrowings = await _dbContext.Borrowings
+                .Include(b => b.Book)
+                .Include(b => b.Member)
+                .ToListAsync();
             return Ok(borrowings);
         }
 
-        // GET: api/Borrowings/{id}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBorrowingById(int id)
+        public async Task<IActionResult> GetBorrowing(int id)
         {
-            var borrowing = await _repository.GetBorrowingByIdAsync(id);
-            if (borrowing == null)
-            {
-                return NotFound();
-            }
-
+            var borrowing = await _dbContext.Borrowings
+                .Include(b => b.Book)
+                .Include(b => b.Member)
+                .FirstOrDefaultAsync(b => b.Id == id);
+            if (borrowing == null) return NotFound();
             return Ok(borrowing);
         }
 
-        // POST: api/Borrowings
         [HttpPost]
         public async Task<IActionResult> CreateBorrowing([FromBody] Borrowing borrowing)
         {
-            await _repository.AddBorrowingAsync(borrowing);
-            return CreatedAtAction(nameof(GetBorrowingById), new { id = borrowing.Id }, borrowing);
+            await _dbContext.Borrowings.AddAsync(borrowing);
+            await _dbContext.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetBorrowing), new { id = borrowing.Id }, borrowing);
         }
 
-        // PUT: api/Borrowings/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBorrowing(int id, [FromBody] Borrowing updatedBorrowing)
         {
-            var existingBorrowing = await _repository.GetBorrowingByIdAsync(id);
-            if (existingBorrowing == null)
-            {
-                return NotFound();
-            }
+            var borrowing = await _dbContext.Borrowings.FindAsync(id);
+            if (borrowing == null) return NotFound();
 
-            existingBorrowing.BorrowedDate = updatedBorrowing.BorrowedDate;
-            existingBorrowing.ReturnedDate = updatedBorrowing.ReturnedDate;
-            existingBorrowing.BookId = updatedBorrowing.BookId;
-            existingBorrowing.MemberId = updatedBorrowing.MemberId;
+            borrowing.BorrowedDate = updatedBorrowing.BorrowedDate;
+            borrowing.ReturnedDate = updatedBorrowing.ReturnedDate;
 
-            await _repository.UpdateBorrowingAsync(existingBorrowing);
+            await _dbContext.SaveChangesAsync();
             return NoContent();
         }
 
-        // DELETE: api/Borrowings/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBorrowing(int id)
         {
-            var borrowing = await _repository.GetBorrowingByIdAsync(id);
-            if (borrowing == null)
-            {
-                return NotFound();
-            }
+            var borrowing = await _dbContext.Borrowings.FindAsync(id);
+            if (borrowing == null) return NotFound();
 
-            await _repository.DeleteBorrowingAsync(id);
+            _dbContext.Borrowings.Remove(borrowing);
+            await _dbContext.SaveChangesAsync();
             return NoContent();
         }
     }
