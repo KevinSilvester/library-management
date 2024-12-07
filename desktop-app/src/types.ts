@@ -1,5 +1,5 @@
 export interface Book {
-   isbn: string;
+   isbn: string
    title: string
    author: string
    copiesAvailable: number
@@ -15,11 +15,20 @@ export interface BooksRes {
 
 export interface Borrow {
    id: number
-   bookIsbn: string
+   bookISBN: string
    bookTitle: string
    memberName: string
    borrowedDate: string
    returnDate?: string
+}
+
+export interface BorrowsRes {
+   pagination: {
+      pageNumber: number
+      pageSize: number
+      totalRecords: number
+   }
+   data: Borrow[]
 }
 
 export interface Member {

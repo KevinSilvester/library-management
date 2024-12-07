@@ -1,4 +1,4 @@
-import { Book, BooksRes } from '@/types'
+import { Book, BooksRes, BorrowsRes } from '@/types'
 import { fetch } from '@tauri-apps/plugin-http'
 
 export async function login(username: string, password: string) {
@@ -44,6 +44,38 @@ export async function logout() {
 export async function getBooks(page: number, pageSize: number, search: string): Promise<BooksRes | null> {
    try {
       const res = await fetch(`http://localhost:5173/api/Books?search=${search}&page=${page}&pageSize=${pageSize}`, {
+         method: 'GET',
+         headers: setHeaders()
+      })
+
+      if (res.ok) {
+         return await JSON.parse(await res.text())
+      }
+   } catch (e) {
+      console.log(e)
+   }
+   return null
+}
+
+export async function getBook(isbn: string): Promise<Book | null> {
+   try {
+      const res = await fetch(`http://localhost:5173/api/Books/${isbn}`, {
+         method: 'GET',
+         headers: setHeaders()
+      })
+
+      if (res.ok) {
+         return await JSON.parse(await res.text())
+      }
+   } catch (e) {
+      console.log(e)
+   }
+   return null
+}
+
+export async function getBorrows(pageNumber: number, pageSize: number, search: string): Promise<BorrowsRes | null> {
+   try {
+      const res = await fetch(`http://localhost:5173/api/Borrowings?search=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`, {
          method: 'GET',
          headers: setHeaders()
       })
