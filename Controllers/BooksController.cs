@@ -1,4 +1,6 @@
-﻿using library_management.Data;
+﻿using AutoMapper;
+using library_management.Data;
+using library_management.DTOs;
 using library_management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +12,21 @@ namespace library_management.Controllers
     public class BooksController : ControllerBase
     {
         private readonly LibraryDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public BooksController(LibraryDbContext dbContext)
+        public BooksController(LibraryDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetBooks()
         {
             var books = await _dbContext.Books.ToListAsync();
-            return Ok(books);
+            var bookDtos = _mapper.Map<List<BookDto>>(books);
+
+            return Ok(bookDtos);
         }
 
         [HttpGet("{isbn}")]
@@ -28,7 +34,9 @@ namespace library_management.Controllers
         {
             var book = await _dbContext.Books.FindAsync(isbn);
             if (book == null) return NotFound();
-            return Ok(book);
+            var bookDto = _mapper.Map<BookDto>(book);
+
+            return Ok(bookDto);
         }
 
         [HttpPost]

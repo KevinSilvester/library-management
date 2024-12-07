@@ -1,4 +1,6 @@
-﻿using library_management.Data;
+﻿using AutoMapper;
+using library_management.Data;
+using library_management.DTOs;
 using library_management.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +12,20 @@ namespace library_management.Controllers
     public class MembersController : ControllerBase
     {
         private readonly LibraryDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public MembersController(LibraryDbContext dbContext)
+        public MembersController(LibraryDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetMembers()
         {
             var members = await _dbContext.Members.Include(m => m.Borrowings).ToListAsync();
-            return Ok(members);
+            var memberDtos = _mapper.Map<List<MemberDto>>(members);
+            return Ok(memberDtos);
         }
 
         [HttpGet("{id}")]
@@ -29,7 +34,8 @@ namespace library_management.Controllers
             var member = await _dbContext.Members.Include(m => m.Borrowings)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null) return NotFound();
-            return Ok(member);
+            var memberDto = _mapper.Map<MemberDto>(member);
+            return Ok(memberDto);
         }
 
         [HttpPost]
