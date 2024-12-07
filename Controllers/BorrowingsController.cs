@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace library_management.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BorrowingsController : ControllerBase
@@ -22,7 +23,6 @@ namespace library_management.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetBorrowings()
@@ -35,7 +35,7 @@ namespace library_management.Controllers
             return Ok(borrowingDtos);
         }
 
-        [Authorize]
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBorrowing(int id)
         {
@@ -48,7 +48,7 @@ namespace library_management.Controllers
             return Ok(borrowingDto);
         }
 
-        [Authorize]
+
         [HttpPost]
         public async Task<IActionResult> CreateBorrowing([FromBody] Borrowing borrowing)
         {
@@ -59,7 +59,7 @@ namespace library_management.Controllers
             return CreatedAtAction(nameof(GetBorrowing), new { id = borrowing.Id }, borrowing);
         }
 
-        [Authorize]
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBorrowing(int id, [FromBody] Borrowing updatedBorrowing)
         {
@@ -73,7 +73,7 @@ namespace library_management.Controllers
             return NoContent();
         }
 
-        [Authorize]
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBorrowing(int id)
         {

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace library_management.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MembersController : ControllerBase
@@ -21,7 +22,6 @@ namespace library_management.Controllers
             _mapper = mapper;
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetMembers()
         {
@@ -30,7 +30,7 @@ namespace library_management.Controllers
             return Ok(memberDtos);
         }
 
-        [Authorize]
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMember(int id)
         {
@@ -41,7 +41,6 @@ namespace library_management.Controllers
             return Ok(memberDto);
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateMember([FromBody] Member member)
         {
@@ -50,7 +49,6 @@ namespace library_management.Controllers
             return CreatedAtAction(nameof(GetMember), new { id = member.Id }, member);
         }
 
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateMember(int id, [FromBody] Member updatedMember)
         {
@@ -65,7 +63,6 @@ namespace library_management.Controllers
             return NoContent();
         }
 
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMember(int id)
         {
