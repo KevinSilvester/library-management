@@ -2,6 +2,7 @@
 using library_management.Data;
 using library_management.DTOs;
 using library_management.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,7 @@ namespace library_management.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetBooks()
         {
@@ -29,6 +31,7 @@ namespace library_management.Controllers
             return Ok(bookDtos);
         }
 
+        [Authorize]
         [HttpGet("{isbn}")]
         public async Task<IActionResult> GetBook(string isbn)
         {
@@ -39,6 +42,7 @@ namespace library_management.Controllers
             return Ok(bookDto);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateBook([FromBody] Book book)
         {
@@ -47,6 +51,7 @@ namespace library_management.Controllers
             return CreatedAtAction(nameof(GetBook), new { isbn = book.ISBN }, book);
         }
 
+        [Authorize]
         [HttpPut("{isbn}")]
         public async Task<IActionResult> UpdateBook(string isbn, [FromBody] Book updatedBook)
         {
@@ -61,6 +66,7 @@ namespace library_management.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{isbn}")]
         public async Task<IActionResult> DeleteBook(string isbn)
         {
