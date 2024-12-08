@@ -6,6 +6,7 @@ cmds = [
 
 [phases.build]
 cmds = [
+   'rm -rf LibraryManagement.Tests',
    'dotnet publish --no-restore library-management.csproj -c Release -o out',
 ]
 
