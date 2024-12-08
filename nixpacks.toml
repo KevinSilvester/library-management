@@ -1,8 +1,13 @@
 [phases.install]
-cmds = ['dotnet restore library-management/library-management.csproj']
+cmds = [
+   'rm -rf LibraryManagement.Tests',
+   'dotnet restore library-management.csproj',
+]
 
 [phases.build]
-cmds = ['dotnet publish --no-restore library-management/library-management.csproj -c Release -o out']
+cmds = [
+   'dotnet publish --no-restore library-management.csproj -c Release -o out',
+]
 
 [start]
 cmd = 'out/library-management'
