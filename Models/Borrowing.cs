@@ -12,13 +12,13 @@ namespace library_management.Models
         public int MemberId { get; set; }
 
         [ForeignKey(nameof(MemberId))]
-        public Member Member { get; set; }
+        public Member? Member { get; set; }
 
         [Required]
-        [ForeignKey(nameof(Book))]
         public string BookISBN { get; set; } // Foreign Key to Book
 
-        public Book Book { get; set; } // Navigation Property
+        [ForeignKey(nameof(BookISBN))]
+        public Book? Book { get; set; } // Navigation Property
 
         [Required]
         public DateTime BorrowedDate { get; set; }

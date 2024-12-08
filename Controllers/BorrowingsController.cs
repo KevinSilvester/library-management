@@ -88,12 +88,24 @@ namespace library_management.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBorrowing([FromBody] Borrowing borrowing)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            // Ensure foreign keys are provided and valid
+            if (borrowing.MemberId == 0 || string.IsNullOrEmpty(borrowing.BookISBN))
+                return BadRequest(new { Message = "MemberId and BookISBN are required." });
+
+            // Check if the Member and Book exist in the database
+            var memberExists = await _dbContext.Members.AnyAsync(m => m.Id == borrowing.MemberId);
+            var bookExists = await _dbContext.Books.AnyAsync(b => b.ISBN == borrowing.BookISBN);
+
+            if (!memberExists || !bookExists)
+                return NotFound(new { Message = "The specified Member or Book does not exist." });
+
+            // Add borrowing
             await _dbContext.Borrowings.AddAsync(borrowing);
             await _dbContext.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetBorrowing), new { id = borrowing.Id }, borrowing);
         }
+
 
 
         [HttpPut("{id}")]

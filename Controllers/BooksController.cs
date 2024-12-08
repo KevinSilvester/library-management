@@ -74,36 +74,62 @@ namespace library_management.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBook([FromBody] Book book)
         {
-            await _dbContext.Books.AddAsync(book);
-            await _dbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetBook), new { isbn = book.ISBN }, book);
+            try
+            {
+                await _dbContext.Books.AddAsync(book);
+                await _dbContext.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetBook), new { isbn = book.ISBN }, new
+                {
+                    Message = "Book created successfully.",
+                    Book = book
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Failed to create the book.", Error = ex.Message });
+            }
         }
-
 
         [HttpPut("{isbn}")]
         public async Task<IActionResult> UpdateBook(string isbn, [FromBody] Book updatedBook)
         {
-            var book = await _dbContext.Books.FindAsync(isbn);
-            if (book == null) return NotFound();
+            try
+            {
+                var book = await _dbContext.Books.FindAsync(isbn);
+                if (book == null)
+                    return NotFound(new { Message = "Book not found." });
 
-            book.Title = updatedBook.Title;
-            book.Author = updatedBook.Author;
-            book.CopiesAvailable = updatedBook.CopiesAvailable;
+                book.Title = updatedBook.Title;
+                book.Author = updatedBook.Author;
+                book.CopiesAvailable = updatedBook.CopiesAvailable;
 
-            await _dbContext.SaveChangesAsync();
-            return NoContent();
+                await _dbContext.SaveChangesAsync();
+                return Ok(new { Message = "Book updated successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Failed to update the book.", Error = ex.Message });
+            }
         }
-
 
         [HttpDelete("{isbn}")]
         public async Task<IActionResult> DeleteBook(string isbn)
         {
-            var book = await _dbContext.Books.FindAsync(isbn);
-            if (book == null) return NotFound();
+            try
+            {
+                var book = await _dbContext.Books.FindAsync(isbn);
+                if (book == null)
+                    return NotFound(new { Message = "Book not found." });
 
-            _dbContext.Books.Remove(book);
-            await _dbContext.SaveChangesAsync();
-            return NoContent();
+                _dbContext.Books.Remove(book);
+                await _dbContext.SaveChangesAsync();
+                return Ok(new { Message = "Book deleted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "Failed to delete the book.", Error = ex.Message });
+            }
         }
+
     }
 }
