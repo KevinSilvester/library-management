@@ -3,7 +3,7 @@ import { fetch } from '@tauri-apps/plugin-http'
 
 export async function login(username: string, password: string) {
    try {
-      const res = await fetch('http://localhost:5173/api/Auth/login', {
+      const res = await fetch('https://library-management-production.up.railway.app/api/Auth/login', {
          method: 'POST',
          headers: { 'Content-Type': 'application/json' },
          body: JSON.stringify({ username, password })
@@ -27,7 +27,7 @@ function setHeaders(): HeadersInit {
 
 export async function logout() {
    try {
-      const res = await fetch('http://localhost:5173/api/Auth/logout', {
+      const res = await fetch('https://library-management-production.up.railway.app/api/Auth/logout', {
          method: 'POST',
          headers: setHeaders()
       })
@@ -43,7 +43,7 @@ export async function logout() {
 
 export async function getBooks(page: number, pageSize: number, search: string): Promise<BooksRes | null> {
    try {
-      const res = await fetch(`http://localhost:5173/api/Books?search=${search}&page=${page}&pageSize=${pageSize}`, {
+      const res = await fetch(`https://library-management-production.up.railway.app/api/Books?search=${search}&page=${page}&pageSize=${pageSize}`, {
          method: 'GET',
          headers: setHeaders()
       })
@@ -59,7 +59,7 @@ export async function getBooks(page: number, pageSize: number, search: string): 
 
 export async function getBook(isbn: string): Promise<Book | null> {
    try {
-      const res = await fetch(`http://localhost:5173/api/Books/${isbn}`, {
+      const res = await fetch(`https://library-management-production.up.railway.app/api/Books/${isbn}`, {
          method: 'GET',
          headers: setHeaders()
       })
@@ -76,7 +76,7 @@ export async function getBook(isbn: string): Promise<Book | null> {
 export async function getBorrows(pageNumber: number, pageSize: number, search: string): Promise<BorrowsRes | null> {
    try {
       const res = await fetch(
-         `http://localhost:5173/api/Borrowings?query=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
+         `https://library-management-production.up.railway.app/api/Borrowings?query=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
          {
             method: 'GET',
             headers: setHeaders()
@@ -95,7 +95,7 @@ export async function getBorrows(pageNumber: number, pageSize: number, search: s
 export async function getMembers(pageNumber: number, pageSize: number, search: string): Promise<MembersRes | null> {
    try {
       const res = await fetch(
-         `http://localhost:5173/api/Members?query=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
+         `https://library-management-production.up.railway.app/api/Members?query=${search}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
          {
             method: 'GET',
             headers: setHeaders()
