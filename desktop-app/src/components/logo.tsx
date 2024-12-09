@@ -5,10 +5,10 @@ type Props = {
    props?: React.ImgHTMLAttributes<HTMLImageElement>
 }
 
-export default function Logo({ className, ...props}: Props) {
+export default function Logo({ className, ...props }: Props) {
    return (
       <>
-         <img src={icon} alt='Logo' {...props} className={className}/>
+         <img src={icon} alt='Logo' {...props} className={className} />
       </>
    )
 }

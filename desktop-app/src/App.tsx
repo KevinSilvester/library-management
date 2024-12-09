@@ -1,4 +1,3 @@
-import { fetch } from '@tauri-apps/plugin-http'
 import { BookUp2, LibraryBig, LogOut, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -26,19 +25,12 @@ function SelectedPage({ pageName }: { pageName: Page }) {
 }
 
 function App() {
-   // const [userList, setUserList] = useState<UserList>([])
-   // const [user, setUser] = useState<UserList>([])
-   // useEffect(() => {
-   //    ;(async () => setUserList(await invoke('list_users')))()
-   // }, [])
-
    const [isLoggedIn, setIsLoggedIn] = useState(false)
    const [activePageName, setActiveTabName] = useState<Page>('books')
    const { toast } = useToast()
 
    const login = async (username: string, password: string) => {
-      // if (await api.login(username, password)) {
-      if (await api.login('admin', 'test123')) {
+      if (await api.login(username, password)) {
          setIsLoggedIn(true)
          toast({
             duration: 1000,

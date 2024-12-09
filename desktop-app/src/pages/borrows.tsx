@@ -32,7 +32,7 @@ export default function Borrows() {
    const [pagination, setPagination] = useState<Paginations[]>([])
 
    useEffect(() => {
-      ; (async () => {
+      ;(async () => {
          const borrows = await api.getBorrows(1, MAX_BORROWS, search)
          if (borrows) {
             setBorrows(borrows.data)

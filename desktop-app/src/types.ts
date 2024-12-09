@@ -37,3 +37,12 @@ export interface Member {
    email: string
    borrowings: Borrow[]
 }
+
+export interface MembersRes {
+   pagination: {
+      pageNumber: number
+      pageSize: number
+      totalRecords: number
+   }
+   data: Member[]
+}

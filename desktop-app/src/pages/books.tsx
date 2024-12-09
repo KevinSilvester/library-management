@@ -6,7 +6,7 @@ import {
    PaginationContent,
    PaginationEllipsis,
    PaginationItem,
-   PaginationLink,
+   PaginationLink
 } from '@/components/ui/pagination'
 import { Skeleton } from '@/components/ui/skeleton'
 import * as api from '@/lib/api'
@@ -213,13 +213,15 @@ export default function Books() {
                <div className='grid place-items-center w-full h-full'>
                   <div className='flex flex-col items-center p-4 gap-4'>
                      <div className='w-[20rem] h-[28rem] relative overflow-hidden rounded-md grid place-items-center'>
-                        {!showBook && <Skeleton className='w-[20rem] h-[28rem] absolute top-1/2 bottom-1/2 bg-custom-slate-1 -translate-y-1/2' />}
-                           <img
-                              src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`}
-                              alt={book.title}
-                              className={'object-cover ' + (showBook ? 'opacity-100' : 'opacity-0')}
-                              onLoad={() => setShowBook(true)}
-                           />
+                        {!showBook && (
+                           <Skeleton className='w-[20rem] h-[28rem] absolute top-1/2 bottom-1/2 bg-custom-slate-1 -translate-y-1/2' />
+                        )}
+                        <img
+                           src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`}
+                           alt={book.title}
+                           className={'object-cover ' + (showBook ? 'opacity-100' : 'opacity-0')}
+                           onLoad={() => setShowBook(true)}
+                        />
                      </div>
                      <div className='flex justify-center items-start gap-2'>
                         <div className='flex flex-col font-bold items-end'>

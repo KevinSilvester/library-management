@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -26,10 +26,6 @@ export default function Login({ login }: Props) {
          password: ''
       }
    })
-
-   const onSubmit = (data: z.infer<typeof FormSchema>) => async (e: React.FormEvent) => {
-      await login(data.username, data.password)
-   }
 
    return (
       <div className='grid place-items-center w-full h-full'>

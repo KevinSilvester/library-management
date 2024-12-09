@@ -1,6 +1,4 @@
 import js from '@eslint/js'
-import tanstackQuery from '@tanstack/eslint-plugin-query'
-import tanstackRouter from '@tanstack/eslint-plugin-router'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
@@ -18,8 +16,6 @@ export default tseslint.config(
       plugins: {
          'react-hooks': reactHooks,
          'react-refresh': reactRefresh,
-         '@tanstack/query': tanstackQuery,
-         '@tanstack/router': tanstackRouter
       },
       rules: {
          ...reactHooks.configs.recommended.rules,
